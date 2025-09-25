@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -14,14 +13,8 @@
 </head>
 <body class="spectrum">
 
-	<cfset themeDir = "C:\cf2025\cfusion\charting\themes">
-	<cfset fileList = []>
-	<cfdirectory action="list" directory="#themeDir#" name="dirQuery">
-	<cfloop query="dirQuery">
-		<cfif type EQ "File">
-			<cfset arrayAppend(fileList, name)>
-		</cfif>
-	</cfloop>
+	<cfset themeDir = application.cfthemebase>
+	<cfset fileList = application.themecfbasearr>
 
 	<cfparam name="form.selectedFile" default="">
 	<cfset fileContent = "">
@@ -55,18 +48,35 @@
 					</cfoutput>
 				</select>
 			</form>
+
+            <!-- File content display -->
             <cfif len(fileContent)>
-                <cfscript>
-                    fileContentArray = deserializeJSON(fileContent);
-                    writeDump(fileContentArray);
-                </cfscript>
+				<cfset fileContentArray = deserializeJSON(fileContent)>
+
+                <div class="spectrum-Grid spectrum-Grid--sizeL" style="display:flex; gap: 20px; margin-top: 20px;">
+                    <!-- Dump Column -->
+                    <div style="flex: 1; min-width: 300px; border: 1px solid #ccc; padding: 10px; overflow: auto;">
+                        <h3 class="spectrum-Heading spectrum-Heading--sizeM">Parsed File</h3>
+                        <cfdump var="#fileContentArray#">
+                    </div>
+
+					<!-- Raw JSON Column -->
+					<div style="flex: 1; min-width: 300px; border: 1px solid #ccc; padding: 10px; overflow: auto;">
+						<h3 class="spectrum-Heading spectrum-Heading--sizeM">Raw File Content</h3>
+						<pre id="rawJson" style="white-space: pre-wrap; word-wrap: break-word; background:#f4f4f4; padding:1em; border:1px solid #ccc;"></pre>
+					</div>
+
+					<script>
+						// Grab the JSON string from CF
+						const jsonStr = '<cfoutput>#encodeForJavaScript(serializeJSON(fileContentArray))#</cfoutput>';
+						// Parse and pretty-print it with indentation
+						const prettyJson = JSON.stringify(JSON.parse(jsonStr), null, 4);
+						// Display in the <pre>
+						document.getElementById('rawJson').textContent = prettyJson;
+					</script>
+                </div>
             </cfif>
-			<cfif len(fileContent)>
-				<cfoutput>
-				<h3 class="spectrum-Heading spectrum-Heading--sizeM">Contents of #form.selectedFile#:</h3>
-				<pre style="background:##f4f4f4; padding:1em; border:1px solid ##ccc;" class="spectrum">#serializeJSON(fileContentArray)#</pre>
-				</cfoutput>
-			</cfif>
+
 		</div>
 	</div>
 

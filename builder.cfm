@@ -29,20 +29,12 @@
     </style>
 </head>
 <body class="spectrum">
-
-<cfset themeDir = "C:\cf2025\cfusion\charting\themes">
+<cfset themeDir = application.cfthemebase>
 <cfset currentDir = expandPath(".")>
-<cfset fileList = []>
+
+<cfset fileList = application.themecfbasearr>
 <cfset selectedTheme = {}>
 <cfset showForm = false>
-
-<!-- Get list of available themes -->
-<cfdirectory action="list" directory="#themeDir#" name="dirQuery">
-<cfloop query="dirQuery">
-    <cfif type EQ "File">
-        <cfset arrayAppend(fileList, name)>
-    </cfif>
-</cfloop>
 
 <!-- Handle form submissions -->
 <cfparam name="form.baseTheme" default="">
@@ -138,7 +130,10 @@
 
 <div class="spectrum-Page">
     <div class="spectrum-Page-content theme-builder-container">
+        <a href="index.cfm" style="text-decoration: none; color: inherit;">
         <h1 class="spectrum-Heading spectrum-Heading--sizeXL">ColdFusion Chart Theme Builder</h1>
+        </a>
+
         
         <cfif isDefined("savedMessage")>
             <div class="spectrum-Alert spectrum-Alert--positive" style="margin-bottom: 20px;">

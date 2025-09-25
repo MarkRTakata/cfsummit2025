@@ -1,23 +1,11 @@
 <cfset currentDir = expandPath(".")>
 <cfset themesDir = currentDir & "/themes">
-<cfset builtInThemeDir = "C:\cf2025\cfusion\charting\themes">
-<cfset customThemeList = []>
-<cfset builtInThemeList = []>
+<cfset builtInThemeDir = application.cfthemebase>
+<cfset customThemeList = application.themelocalbasearr>
+<cfset builtInThemeList = application.themecfbasearr>
 <cfparam name="url.theme" default="">
 
-<!-- Get list of custom themes -->
-<cfdirectory action="list" directory="#themesDir#" name="customThemeQuery" filter="*.json">
-<cfloop query="customThemeQuery">
-    <cfset arrayAppend(customThemeList, name)>
-</cfloop>
 
-<!-- Get list of built-in themes -->
-<cfdirectory action="list" directory="#builtInThemeDir#" name="builtInThemeQuery">
-<cfloop query="builtInThemeQuery">
-    <cfif type EQ "File">
-        <cfset arrayAppend(builtInThemeList, name)>
-    </cfif>
-</cfloop>
 <cfif NOT StructKeyExists(form, "theme")>
 <div class="spectrum-Page">
     <div class="spectrum-Page-content preview-container">

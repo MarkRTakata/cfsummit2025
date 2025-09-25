@@ -33,16 +33,10 @@
 
 <cfset currentDir = expandPath(".")>
 <cfset themesDir = currentDir & "/themes">
-<cfset customThemeList = []>
+<cfset customThemeList = application.themelocalbasearr>
 <cfset selectedTheme = {}>
 <cfset showForm = false>
 <cfset currentThemeName = "">
-
-<!-- Get list of custom themes -->
-<cfdirectory action="list" directory="#themesDir#" name="customThemeQuery" filter="*.json">
-<cfloop query="customThemeQuery">
-    <cfset arrayAppend(customThemeList, name)>
-</cfloop>
 
 <!-- Handle form submissions -->
 <cfparam name="form.selectedTheme" default="">
@@ -151,7 +145,9 @@
 
 <div class="spectrum-Page">
     <div class="spectrum-Page-content theme-builder-container">
-        <h1 class="spectrum-Heading spectrum-Heading--sizeXL">ColdFusion Chart Theme Editor</h1>
+        <a href="index.cfm" style="text-decoration: none; color: inherit;">
+            <h1 class="spectrum-Heading spectrum-Heading--sizeXL">ColdFusion Chart Theme Editor</h1>
+        </a>
 
         <cfif isDefined("savedMessage")>
             <div class="spectrum-Alert spectrum-Alert--positive" style="margin-bottom: 20px;">
